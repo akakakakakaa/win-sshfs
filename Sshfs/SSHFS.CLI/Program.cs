@@ -51,6 +51,11 @@ namespace SSHFS.CLI
             HelpText = "Read password from stdin")]
         public bool Password { get; set; }
 
+        [Option('y', "password2",
+            Required = false,
+            HelpText ="Read password2")]
+        public string Password2 { get; set; }
+
         [Option('k', "private-keys",
             Required = false,
             HelpText = "Path to SSH user's private key(s), if key-based auth should be attempted")]
@@ -99,8 +104,8 @@ namespace SSHFS.CLI
             }
             else if (options.Password)
             {
-                Console.WriteLine("No SSH key file selected, using password auth instead.");
-                var pass = ReadPassword("Please enter password: ");
+                //Console.WriteLine("No SSH key file selected, using password auth instead.");
+                var pass = options.Password2;//ReadPassword("Please enter password: ");
 
                 auths.AddRange(new(string, ConnectionInfo)[]
                 {
@@ -126,6 +131,7 @@ namespace SSHFS.CLI
                     : new PrivateKeyFile(k));
 
             return new PrivateKeyConnectionInfo(options.Host, options.Port, options.Username, pkFiles.ToArray());
+            return null;
         }
 
         static string ReadPassword(string prompt)
